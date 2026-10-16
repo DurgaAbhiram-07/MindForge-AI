@@ -18,6 +18,7 @@ import {
   X,
 } from 'lucide-react'
 import { useDashboardStore, type DashboardActivity, type DashboardTask } from './store/dashboardStore'
+import StudyMaterialsPage from './StudyMaterials'
 
 type NavItem = {
   label: string
@@ -128,6 +129,7 @@ function App() {
         </header>
 
         <div className="page-content">
+          {activePage === 'Study materials' ? <StudyMaterialsPage onFeedback={setFeedback} /> : <>
           <section className="page-heading">
             <div>
               <p className="eyebrow">Friday, October 16, 2026 <span className="eyebrow-dot" /> 08:42 AM</p>
@@ -170,6 +172,7 @@ function App() {
             <div className="panel-heading"><div><p className="section-kicker">Recent activity</p><h2>Pick up where you left off.</h2></div>{activity.length > 0 && <button className="text-button" onClick={() => { clearActivity(); setFeedback('Recent activity cleared from this device.') }}>Clear activity <X size={14} /></button>}</div>
             {activity.length > 0 ? <div className="activity-list">{activity.map((item) => <ActivityRow key={item.id} {...item} onOpen={() => handleActivityOpen(item)} />)}</div> : <div className="empty-state"><div className="empty-state-icon"><BookOpen size={18} /></div><h3>No recent activity yet</h3><p>Complete a study task and your learning trail will appear here.</p><button className="text-button" onClick={() => { restoreDemoActivity(); setFeedback('Demo activity restored.') }}>Restore demo activity <ArrowUpRight size={14} /></button></div>}
           </section>
+          </>}
         </div>
       </main>
     </div>

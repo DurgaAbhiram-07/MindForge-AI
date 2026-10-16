@@ -33,6 +33,7 @@ export type DashboardState = {
 export type DashboardActions = {
   toggleTask: (taskId: string) => void
   setActivePage: (page: string) => void
+  addActivity: (activity: Omit<DashboardActivity, 'id'>) => void
   clearActivity: () => void
   restoreDemoActivity: () => void
 }
@@ -141,6 +142,10 @@ export const useDashboardStore = create<DashboardStore>()(
           }
         }),
         setActivePage: (activePage) => set({ activePage }),
+        addActivity: (activity) => set((state) => ({
+          activity: [{ ...activity, id: `activity-${Date.now()}` }, ...state.activity].slice(0, 8),
+          isDemoData: false,
+        })),
         clearActivity: () => set({ activity: [] }),
         restoreDemoActivity: () => set({ activity: initialActivity.map((item) => ({ ...item })) }),
       }),

@@ -14,6 +14,9 @@ MindForge AI is a premium, personalized learning workspace. The current Phase 1 
 - Daily study task completion with immediate progress updates and feedback
 - Safe localStorage handling for unavailable or malformed saved data
 - Functional recent-activity empty state and restore action
+- Study Materials library with subject/topic organization, search, filters, and sorting
+- Create, edit, read, and delete notes with local persistence and confirmation dialogs
+- Readable note view with lightweight headings, paragraphs, and list formatting
 - Accessible labels for primary controls
 - Reproducible Node.js, npm, test, lint, typecheck, build, and Docker configuration
 
@@ -22,6 +25,7 @@ MindForge AI is a premium, personalized learning workspace. The current Phase 1 
 - React + TypeScript + Vite
 - Tailwind CSS v4 via the Vite plugin
 - Zustand with localStorage persistence for dashboard state
+- Separate persisted Zustand notes store under the `mindforge-notes` key
 - Recharts for upcoming progress visualizations
 - Lucide React icons
 - Vitest + React Testing Library
@@ -83,8 +87,8 @@ Then open `http://localhost:4173`.
 ## Delivery plan
 
 1. Foundation and dashboard shell
-2. Dashboard behavior and local persistence (current)
-3. Study materials and subject organization
+2. Dashboard behavior and local persistence
+3. Study materials and smart notes (current)
 4. Quiz flow with scoring and explanations
 5. Weak-topic detection based on quiz performance
 6. Personalized study planner
