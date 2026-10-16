@@ -2,15 +2,18 @@
 
 > Learn Smarter. Think Deeper. Achieve More.
 
-MindForge AI is a premium, personalized learning workspace. The current Phase 0 slice establishes a responsive dashboard shell with local, deterministic learning data. Real AI integrations will be added only behind an explicit provider boundary in a later phase.
+MindForge AI is a premium, personalized learning workspace. The current Phase 1 slice provides a responsive dashboard with locally persisted, deterministic learning data. Real AI integrations will be added only behind an explicit provider boundary in a later phase.
 
 ## Current foundation
 
 - Responsive dark dashboard shell
-- Learning statistics, daily focus, streak, and knowledge score cards
-- Recent activity list
+- Learning statistics for daily goals, study time, streak, quiz accuracy, and knowledge score
+- Persisted study task progress and recent activity
+- Demo-data notice that distinguishes local sample data from real AI output
 - Functional navigation state and mobile navigation drawer
-- Daily goal completion interaction
+- Daily study task completion with immediate progress updates and feedback
+- Safe localStorage handling for unavailable or malformed saved data
+- Functional recent-activity empty state and restore action
 - Accessible labels for primary controls
 - Reproducible Node.js, npm, test, lint, typecheck, build, and Docker configuration
 
@@ -18,7 +21,7 @@ MindForge AI is a premium, personalized learning workspace. The current Phase 0 
 
 - React + TypeScript + Vite
 - Tailwind CSS v4 via the Vite plugin
-- Zustand for future persisted client state
+- Zustand with localStorage persistence for dashboard state
 - Recharts for upcoming progress visualizations
 - Lucide React icons
 - Vitest + React Testing Library
@@ -79,10 +82,11 @@ Then open `http://localhost:4173`.
 
 ## Delivery plan
 
-1. Foundation and dashboard shell (current)
-2. Study materials and subject organization
-3. Quiz flow with scoring and explanations
-4. Weak-topic detection based on quiz performance
-5. Personalized study planner
-6. Progress charts, achievements, and streak history
-7. Optional real AI provider integration with explicit AI-generated labeling
+1. Foundation and dashboard shell
+2. Dashboard behavior and local persistence (current)
+3. Study materials and subject organization
+4. Quiz flow with scoring and explanations
+5. Weak-topic detection based on quiz performance
+6. Personalized study planner
+7. Progress charts, achievements, and streak history
+8. Optional real AI provider integration with explicit AI-generated labeling
