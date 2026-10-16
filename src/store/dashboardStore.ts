@@ -34,6 +34,7 @@ export type DashboardActions = {
   toggleTask: (taskId: string) => void
   setActivePage: (page: string) => void
   addActivity: (activity: Omit<DashboardActivity, 'id'>) => void
+  recordQuizResult: (score: number) => void
   clearActivity: () => void
   restoreDemoActivity: () => void
 }
@@ -146,6 +147,7 @@ export const useDashboardStore = create<DashboardStore>()(
           activity: [{ ...activity, id: `activity-${Date.now()}` }, ...state.activity].slice(0, 8),
           isDemoData: false,
         })),
+        recordQuizResult: (score) => set({ quizAccuracy: Math.min(100, Math.max(0, Math.round(score))), isDemoData: false }),
         clearActivity: () => set({ activity: [] }),
         restoreDemoActivity: () => set({ activity: initialActivity.map((item) => ({ ...item })) }),
       }),

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { useDashboardStore, type DashboardActivity, type DashboardTask } from './store/dashboardStore'
 import StudyMaterialsPage from './StudyMaterials'
+import QuizzesPage from './Quizzes'
 
 type NavItem = {
   label: string
@@ -129,7 +130,7 @@ function App() {
         </header>
 
         <div className="page-content">
-          {activePage === 'Study materials' ? <StudyMaterialsPage onFeedback={setFeedback} /> : <>
+          {activePage === 'Study materials' ? <StudyMaterialsPage onFeedback={setFeedback} /> : activePage === 'Quizzes' ? <QuizzesPage onFeedback={setFeedback} /> : <>
           <section className="page-heading">
             <div>
               <p className="eyebrow">Friday, October 16, 2026 <span className="eyebrow-dot" /> 08:42 AM</p>

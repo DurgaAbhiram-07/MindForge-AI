@@ -42,4 +42,14 @@ describe('MindForge dashboard behavior', () => {
     expect(screen.getByText('No recent activity yet')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /restore demo activity/i })).toBeInTheDocument()
   })
+
+  it('opens the interactive quiz workspace from navigation', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: /quizzes/i }))
+
+    expect(screen.getByRole('heading', { name: 'Quizzes' })).toBeInTheDocument()
+    expect(screen.getByText(/local generation, clearly labeled/i)).toBeInTheDocument()
+  })
 })

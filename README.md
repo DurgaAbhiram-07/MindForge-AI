@@ -17,6 +17,7 @@ MindForge AI is a premium, personalized learning workspace. The current Phase 1 
 - Study Materials library with subject/topic organization, search, filters, and sorting
 - Create, edit, read, and delete notes with local persistence and confirmation dialogs
 - Readable note view with lightweight headings, paragraphs, and list formatting
+- Interactive quiz engine with manual multiple-choice authoring, local note-based generation, scoring, review, retry, and persisted attempts
 - Accessible labels for primary controls
 - Reproducible Node.js, npm, test, lint, typecheck, build, and Docker configuration
 
@@ -26,6 +27,7 @@ MindForge AI is a premium, personalized learning workspace. The current Phase 1 
 - Tailwind CSS v4 via the Vite plugin
 - Zustand with localStorage persistence for dashboard state
 - Separate persisted Zustand notes store under the `mindforge-notes` key
+- Separate persisted Zustand quiz store under the `mindforge-quizzes` key
 - Recharts for upcoming progress visualizations
 - Lucide React icons
 - Vitest + React Testing Library
@@ -88,9 +90,13 @@ Then open `http://localhost:4173`.
 
 1. Foundation and dashboard shell
 2. Dashboard behavior and local persistence
-3. Study materials and smart notes (current)
-4. Quiz flow with scoring and explanations
+3. Study materials and smart notes
+4. Interactive quiz engine (current)
 5. Weak-topic detection based on quiz performance
 6. Personalized study planner
 7. Progress charts, achievements, and streak history
 8. Optional real AI provider integration with explicit AI-generated labeling
+
+## Quiz generation limitations
+
+Quiz generation from notes is deterministic local recall generation. It reads note fields and creates four-option questions without calling an AI model, network service, or backend. It does not infer meaning, verify facts, or adapt difficulty. Manually authored quizzes are the reliable path for precise assessment content.
