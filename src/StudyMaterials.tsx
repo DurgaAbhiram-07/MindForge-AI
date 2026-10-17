@@ -21,6 +21,7 @@ import {
   type NoteSortKey,
 } from './store/notesStore'
 import { useDashboardStore } from './store/dashboardStore'
+import { useGamificationStore } from './store/gamificationStore'
 
 type StudyMaterialsProps = { onFeedback: (message: string) => void }
 
@@ -98,6 +99,10 @@ export default function StudyMaterialsPage({ onFeedback }: StudyMaterialsProps) 
     } else {
       const id = addNote(draft)
       addActivity({ subject: draft.subject, title: draft.title, detail: `${draft.topic} · note added`, color: 'cyan' })
+      const created = useNotesStore.getState().notes.find((n) => n.id === id)
+      if (created) {
+        useGamificationStore.getState().awardNoteCreated(created)
+      }
       setSelectedId(id)
       onFeedback('Note added and saved locally.')
     }

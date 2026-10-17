@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { AlertTriangle, ArrowLeft, ArrowRight, CalendarDays, Check, Clock3, Edit3, ExternalLink, Plus, Sparkles, Trash2, X } from 'lucide-react'
 import './planner.css'
 import { useDashboardStore } from './store/dashboardStore'
+import { useGamificationStore } from './store/gamificationStore'
 import { useNotesStore } from './store/notesStore'
 import { useQuizStore } from './store/quizStore'
 import { deriveWeaknessAnalytics } from './store/weaknessAnalytics'
@@ -118,7 +119,19 @@ export default function StudyPlannerPage({ onFeedback, onOpenResource }: StudyPl
     if (!current) return
     const nextCompleted = !current.completed
     completeTask(task.id, nextCompleted)
-    if (nextCompleted && !current.completed) addActivity({ subject: task.subject, title: `${task.title} completed`, detail: `${task.durationMinutes} min · planner task`, color: 'cyan' })
+    if (nextCompleted && !current.completed) {
+      addActivity({ subject: task.subject, title: `${task.title} completed`, detail: `${task.durationMinutes} min · planner task`, color: 'cyan' })
+      useGamificationStore.getState().awardTaskCompletion(task)
+      useGamificationStore.getState().evaluateAndUnlock({
+        quizzes: useQuizStore.getState().quizzes,
+        attempts: useQuizStore.getState().attempts,
+        plannerTasks: usePlannerStore.getState().tasks,
+        notes: useNotesStore.getState().notes,
+        dailyGoalMinutes: usePlannerStore.getState().preferences.dailyGoalMinutes,
+        currentStreak: 0,
+        longestStreak: 0,
+      })
+    }
     reportFeedback(nextCompleted ? `${task.title} marked complete.` : `${task.title} reopened.`)
   }
 

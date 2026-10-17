@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { ArrowLeft, BrainCircuit, Check, ChevronLeft, ChevronRight, FilePlus2, Lightbulb, Plus, RotateCcw, Sparkles, Trash2, X } from 'lucide-react'
 import { useDashboardStore } from './store/dashboardStore'
+import { useGamificationStore } from './store/gamificationStore'
 import { useNotesStore, type Note } from './store/notesStore'
+import { usePlannerStore } from './store/plannerStore'
 import {
   calculateQuizScore,
   LOCAL_QUIZ_GENERATION_NOTICE,
@@ -55,6 +57,16 @@ export default function QuizzesPage({ onFeedback }: QuizPageProps) {
     setLastScore(score)
     recordQuizResult(score.score)
     addActivity({ subject: activeQuiz.subject, title: `${activeQuiz.title} completed`, detail: `${score.score}% score · ${score.correctCount}/${activeQuiz.questions.length} correct`, color: 'violet' })
+    useGamificationStore.getState().awardQuizAttempt(attempt, activeQuiz)
+    useGamificationStore.getState().evaluateAndUnlock({
+      quizzes: useQuizStore.getState().quizzes,
+      attempts: useQuizStore.getState().attempts,
+      plannerTasks: usePlannerStore.getState().tasks,
+      notes: useNotesStore.getState().notes,
+      dailyGoalMinutes: usePlannerStore.getState().preferences.dailyGoalMinutes,
+      currentStreak: 0,
+      longestStreak: 0,
+    })
     setFeedback('Quiz attempt saved locally.')
     setView('results')
   }

@@ -16,6 +16,11 @@ export default function WeakTopicsPage({ onNavigate }: WeakTopicsProps) {
 
   return <section className="weak-topics-page">
     <div className="page-heading materials-heading"><div><p className="eyebrow">Evidence-based progress</p><h1>Weak Topics</h1><p className="heading-copy">See where your quiz answers show an opportunity to review. Signals are calculated locally from answered questions.</p></div><button className="primary-button" onClick={() => onNavigate('Quizzes')}><BrainCircuit size={16} /> Practice a quiz</button></div>
+    <div className="activity-filter-tabs" style={{ marginBottom: '16px' }}>
+      <button className="activity-filter-tab active" type="button">Weak Topics</button>
+      <button className="activity-filter-tab" type="button" onClick={() => onNavigate('Analytics')}>Learning Analytics</button>
+      <button className="activity-filter-tab" type="button" onClick={() => onNavigate('Achievements')}>Achievements & XP</button>
+    </div>
     <div className="demo-notice" role="note"><ChartNoAxesColumnIncreasing size={14} /> Transparent signal: at least 3 answered questions are required before a topic is classified.</div>
     <section className="progress-summary" aria-label="Weak topic summary"><SummaryCard label="Needs review" value={`${weakCount}`} detail="topics below 70%" tone="pink" /><SummaryCard label="Developing" value={`${developingCount}`} detail="topics below 85%" tone="amber" /><SummaryCard label="Tracked topics" value={`${analytics.topics.length}`} detail="with quiz answers" tone="cyan" /></section>
     {analytics.topics.length === 0 ? <div className="materials-empty" role="status"><div className="empty-state-icon"><Target size={19} /></div><h2>No topic signal yet</h2><p>Complete a quiz and answer at least three questions to see personalized progress here.</p><button className="primary-button" onClick={() => onNavigate('Quizzes')}><BrainCircuit size={15} /> Open quizzes</button></div> : <div className="weak-topic-list">{analytics.topics.map((topic) => <TopicCard key={topic.key} topic={topic} recommendations={analytics.recommendations[topic.key] ?? []} onNavigate={onNavigate} />)}</div>}
