@@ -2,6 +2,9 @@
 
 > Learn Smarter. Think Deeper. Achieve More.
 
+🚀 **Live Demo**: [https://mind-forge-ai-umber.vercel.app/](https://mind-forge-ai-umber.vercel.app/)  
+📦 **GitHub Repository**: [https://github.com/DurgaAbhiram-07/MindForge-AI](https://github.com/DurgaAbhiram-07/MindForge-AI)
+
 MindForge AI is a premium, personalized learning workspace. The current slice provides a responsive dashboard, study materials, interactive quizzes, and transparent weak-topic signals using locally persisted data. Real AI integrations will be added only behind an explicit provider boundary in a later phase.
 
 ## Current foundation
