@@ -13,6 +13,7 @@ export type Quiz = {
   id: string
   title: string
   subject: string
+  topic: string
   difficulty: string
   questions: QuizQuestion[]
   source: 'manual' | 'notes'
@@ -41,6 +42,7 @@ export type ManualQuizInput = {
   title: string
   subject: string
   difficulty: string
+  topic?: string
   questions: readonly QuizQuestionInput[]
 }
 
@@ -129,6 +131,7 @@ function parseQuiz(value: unknown): Quiz | null {
     id: value.id.trim(),
     title: value.title.trim(),
     subject: value.subject.trim(),
+    topic: isNonEmptyString(value.topic) ? value.topic.trim() : value.title.trim(),
     difficulty: value.difficulty.trim(),
     questions: value.questions.map((question) => ({
       prompt: question.prompt.trim(),
@@ -221,6 +224,7 @@ export function createManualQuiz(input: ManualQuizInput, createdAt = nowIso(), i
     id,
     title: input.title.trim(),
     subject: input.subject.trim(),
+    topic: input.topic?.trim() || input.title.trim(),
     difficulty: input.difficulty.trim(),
     questions: input.questions.map((question) => ({
       prompt: question.prompt.trim(),
@@ -309,6 +313,7 @@ export function generateQuizFromNote(note: Note, createdAt = note.updatedAt): Qu
     id: `quiz-notes-${note.id}`,
     title: `${title} · Quick quiz`,
     subject,
+    topic,
     difficulty: 'easy',
     questions: [
       makeQuestion(`What topic is covered by “${title}”?`, topic, [subject, title, 'General review'], 'topic'),
