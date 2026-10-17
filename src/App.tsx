@@ -21,6 +21,8 @@ import { useDashboardStore, type DashboardActivity, type DashboardTask } from '.
 import StudyMaterialsPage from './StudyMaterials'
 import QuizzesPage from './Quizzes'
 import WeakTopicsPage from './WeakTopics'
+import StudyPlannerPage from './StudyPlanner'
+import { usePlannerStore } from './store/plannerStore'
 
 type NavItem = {
   label: string
@@ -40,6 +42,7 @@ function App() {
   const tasks = useDashboardStore((state) => state.tasks)
   const activity = useDashboardStore((state) => state.activity)
   const studyMinutes = useDashboardStore((state) => state.studyMinutes)
+  const plannerTasks = usePlannerStore((state) => state.tasks)
   const currentStreak = useDashboardStore((state) => state.currentStreak)
   const quizAccuracy = useDashboardStore((state) => state.quizAccuracy)
   const dailyGoalMinutes = useDashboardStore((state) => state.dailyGoalMinutes)
@@ -53,7 +56,8 @@ function App() {
   const completedTasks = tasks.filter((task) => task.completed).length
   const completedMinutes = tasks.filter((task) => task.completed).reduce((total, task) => total + task.durationMinutes, 0)
   const dailyProgress = Math.min(100, Math.round((completedMinutes / dailyGoalMinutes) * 100))
-  const studyHours = (studyMinutes / 60).toFixed(1)
+  const plannerCompletedMinutes = plannerTasks.filter((task) => task.completed).reduce((total, task) => total + task.durationMinutes, 0)
+  const studyHours = ((studyMinutes + plannerCompletedMinutes) / 60).toFixed(1)
 
   useEffect(() => {
     if (!feedback) return
@@ -131,7 +135,7 @@ function App() {
         </header>
 
         <div className="page-content">
-          {activePage === 'Study materials' ? <StudyMaterialsPage onFeedback={setFeedback} /> : activePage === 'Quizzes' ? <QuizzesPage onFeedback={setFeedback} /> : activePage === 'Progress' ? <WeakTopicsPage onNavigate={setActivePage} /> : <>
+          {activePage === 'Study materials' ? <StudyMaterialsPage onFeedback={setFeedback} /> : activePage === 'Quizzes' ? <QuizzesPage onFeedback={setFeedback} /> : activePage === 'Study planner' ? <StudyPlannerPage onFeedback={setFeedback} onOpenResource={(type) => { setActivePage(type === 'note' ? 'Study materials' : 'Quizzes'); setFeedback(`Opened linked ${type}.`) }} /> : activePage === 'Progress' ? <WeakTopicsPage onNavigate={setActivePage} /> : <>
           <section className="page-heading">
             <div>
               <p className="eyebrow">Friday, October 16, 2026 <span className="eyebrow-dot" /> 08:42 AM</p>

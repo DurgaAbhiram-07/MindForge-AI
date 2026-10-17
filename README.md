@@ -20,6 +20,7 @@ MindForge AI is a premium, personalized learning workspace. The current slice pr
 - Interactive quiz engine with manual multiple-choice authoring, local note-based generation, scoring, review, retry, and persisted attempts
 - Weak Topics progress view derived from question-level quiz answers, with explicit minimum-sample and accuracy thresholds
 - Personalized next-step links to matching study notes and quizzes; no derived weakness results are persisted
+- Personalized Study Planner with persisted task CRUD, weekly schedule, Today/Upcoming/Completed views, conflict warnings, daily goal progress, and transparent weak-topic review suggestions
 - Accessible labels for primary controls
 - Reproducible Node.js, npm, test, lint, typecheck, build, and Docker configuration
 
@@ -31,6 +32,7 @@ MindForge AI is a premium, personalized learning workspace. The current slice pr
 - Separate persisted Zustand notes store under the `mindforge-notes` key
 - Separate persisted Zustand quiz store under the `mindforge-quizzes` key, including compatible topic metadata for older quizzes
 - Pure local weakness analytics derived from quizzes, attempts, and notes
+- Separate persisted Zustand planner store under the `mindforge-planner` key with safe task and preference sanitization
 - Recharts for upcoming progress visualizations
 - Lucide React icons
 - Vitest + React Testing Library
@@ -95,8 +97,8 @@ Then open `http://localhost:4173`.
 2. Dashboard behavior and local persistence
 3. Study materials and smart notes
 4. Interactive quiz engine
-5. Weak-topic detection based on quiz performance (current)
-6. Personalized study planner
+5. Weak-topic detection based on quiz performance
+6. Personalized study planner (current)
 7. Progress charts, achievements, and streak history
 8. Optional real AI provider integration with explicit AI-generated labeling
 
@@ -107,3 +109,7 @@ Quiz generation from notes is deterministic local recall generation. It reads no
 ## Weak-topic analytics limitations
 
 The Weak Topics view calculates descriptive signals from each answered question in saved quiz attempts. Unanswered questions are excluded, attempts for deleted quizzes are ignored, and a topic is shown as `Not enough data` until at least three questions have been answered. With enough data, topics below 70% accuracy are marked `weak`, topics from 70% through 84% are `developing`, and topics at 85% or higher are `strong`. These thresholds are defined in `src/store/weaknessAnalytics.ts` and the result is recomputed from source data rather than stored as a second source of truth.
+
+## Study planner limitations
+
+Planner recommendations are deterministic local rules, not a connected AI service. The assistant orders incomplete tasks by overdue status, high priority, weak/developing topic matches, and schedule order. Timed tasks are checked for same-day overlaps before saving. Tasks, links, and the daily goal are stored locally under `mindforge-planner`; no account sync or remote calendar integration is included.

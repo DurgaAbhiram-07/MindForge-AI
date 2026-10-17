@@ -3,10 +3,12 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import App from './App'
 import { createInitialDashboardState, useDashboardStore } from './store/dashboardStore'
+import { createInitialPlannerState, usePlannerStore } from './store/plannerStore'
 
 beforeEach(() => {
   localStorage.clear()
   useDashboardStore.setState(createInitialDashboardState())
+  usePlannerStore.setState(createInitialPlannerState())
 })
 
 afterEach(() => cleanup())
@@ -51,5 +53,23 @@ describe('MindForge dashboard behavior', () => {
 
     expect(screen.getByRole('heading', { name: 'Quizzes' })).toBeInTheDocument()
     expect(screen.getByText(/local generation, clearly labeled/i)).toBeInTheDocument()
+  })
+
+  it('completes a planner task and writes one activity item to the dashboard', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: /study planner/i }))
+    expect(screen.getByRole('heading', { name: 'Study planner' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /new task/i }))
+    await user.type(screen.getByLabelText('Title'), 'Review planner task')
+    await user.type(screen.getByLabelText('Subject'), 'Biology')
+    await user.type(screen.getByLabelText('Topic'), 'Cell energy')
+    await user.click(screen.getByRole('button', { name: 'Add task' }))
+    await user.click(screen.getByRole('button', { name: 'Complete Review planner task', pressed: false }))
+    expect(screen.getByRole('status')).toHaveTextContent('Review planner task marked complete.')
+
+    await user.click(screen.getByRole('button', { name: 'Dashboard' }))
+    expect(screen.getByText('Review planner task completed')).toBeInTheDocument()
   })
 })
