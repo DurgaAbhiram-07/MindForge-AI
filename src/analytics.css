@@ -1,0 +1,651 @@
+/* Phase 6 Learning Analytics, Gamification & Achievements */
+
+.analytics-page, .achievements-page {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.analytics-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.date-filters {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(156, 164, 207, 0.14);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.date-filter-button {
+  padding: 8px 14px;
+  color: #858ba8;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.date-filter-button:hover,
+.date-filter-button.active {
+  color: #f4f3ff;
+  background: rgba(137, 102, 255, 0.2);
+}
+
+.analytics-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.03em;
+  background: rgba(137, 102, 255, 0.12);
+  color: #b8a6ff;
+  border: 1px solid rgba(137, 102, 255, 0.25);
+}
+
+.analytics-status-badge.real-data {
+  background: rgba(75, 199, 175, 0.12);
+  color: #78e0c8;
+  border-color: rgba(75, 199, 175, 0.25);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.kpi-card {
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(156, 164, 207, 0.12);
+  background: linear-gradient(145deg, rgba(25, 29, 53, 0.86), rgba(14, 18, 34, 0.8));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(155, 126, 255, 0.3);
+}
+
+.kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.kpi-label {
+  color: #8b91ab;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.kpi-icon {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+}
+
+.kpi-icon-violet { color: #ad99ff; background: rgba(137, 102, 255, 0.16); }
+.kpi-icon-cyan { color: #72e3f2; background: rgba(71, 203, 223, 0.14); }
+.kpi-icon-amber { color: #ffc56d; background: rgba(245, 169, 58, 0.14); }
+.kpi-icon-pink { color: #ee94d2; background: rgba(218, 93, 176, 0.14); }
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: #f0f2ff;
+  line-height: 1.1;
+}
+
+.kpi-value span {
+  font-size: 12px;
+  font-weight: 500;
+  color: #787f9d;
+  margin-left: 4px;
+}
+
+.kpi-detail {
+  margin-top: 8px;
+  color: #707796;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.chart-panel {
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(156, 164, 207, 0.12);
+  background: linear-gradient(145deg, rgba(25, 29, 53, 0.86), rgba(14, 18, 34, 0.8));
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.chart-header h2 {
+  margin: 4px 0 0;
+  font-size: 16px;
+  letter-spacing: -0.03em;
+  color: #f0f1ff;
+}
+
+.chart-container {
+  height: 240px;
+  width: 100%;
+  position: relative;
+}
+
+.chart-empty {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  color: #7b83a2;
+}
+
+.chart-empty svg {
+  color: #8f7cf1;
+  margin-bottom: 12px;
+}
+
+.chart-empty h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #dfe2f4;
+}
+
+.chart-empty p {
+  margin: 0 0 16px;
+  font-size: 11px;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* SVG Chart styling */
+.svg-chart {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.svg-grid-line {
+  stroke: rgba(156, 164, 207, 0.1);
+  stroke-dasharray: 4 4;
+}
+
+.svg-axis-text {
+  fill: #6e7592;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+}
+
+.svg-line-main {
+  fill: none;
+  stroke: #8d70f8;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.svg-line-avg {
+  fill: none;
+  stroke: #45c4d6;
+  stroke-width: 1.8;
+  stroke-dasharray: 3 3;
+}
+
+.svg-dot {
+  fill: #141829;
+  stroke: #ad99ff;
+  stroke-width: 2;
+  transition: r 0.2s ease, fill 0.2s ease;
+  cursor: pointer;
+}
+
+.svg-dot:hover {
+  r: 5;
+  fill: #8d70f8;
+}
+
+.bar-col {
+  transition: fill 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.bar-col:hover {
+  opacity: 0.85;
+}
+
+/* Subject Performance Grid */
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.subject-card {
+  padding: 16px;
+  border-radius: 11px;
+  border: 1px solid rgba(156, 164, 207, 0.12);
+  background: linear-gradient(145deg, rgba(25, 29, 53, 0.86), rgba(14, 18, 34, 0.8));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subject-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subject-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #f0f1ff;
+}
+
+.status-badge {
+  padding: 3px 7px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-excelling { color: #87e3d7; background: rgba(75, 199, 175, 0.12); }
+.status-developing { color: #ffd184; background: rgba(245, 169, 58, 0.12); }
+.status-needs-review { color: #ffb4c0; background: rgba(224, 91, 116, 0.12); }
+.status-no-quizzes { color: #8a91ad; background: rgba(156, 164, 207, 0.1); }
+
+.subject-metrics-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.subject-accuracy-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ad99ff;
+  letter-spacing: -0.05em;
+}
+
+.subject-meta-counts {
+  color: #727997;
+  font-size: 10px;
+}
+
+/* Activity History */
+.activity-filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.activity-filter-tab {
+  padding: 6px 11px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #7d84a3;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.activity-filter-tab.active,
+.activity-filter-tab:hover {
+  background: rgba(137, 102, 255, 0.18);
+  color: #f0efff;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(156, 164, 207, 0.08);
+  margin-bottom: 8px;
+}
+
+.history-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.history-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-copy strong {
+  display: block;
+  font-size: 11px;
+  color: #dfe2f4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-copy span {
+  font-size: 9px;
+  color: #737b98;
+}
+
+.history-badge {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: #bcaaff;
+  background: rgba(137, 102, 255, 0.14);
+}
+
+/* Gamification & Achievements Page */
+.level-hero {
+  padding: 26px;
+  border-radius: 14px;
+  border: 1px solid rgba(137, 102, 255, 0.22);
+  background: radial-gradient(circle at 80% 20%, rgba(137, 102, 255, 0.15), transparent 45%),
+              linear-gradient(145deg, rgba(25, 29, 53, 0.9), rgba(14, 18, 34, 0.85));
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.level-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.level-orb {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #8f72fa, #6142d1);
+  box-shadow: 0 10px 28px rgba(118, 77, 230, 0.35);
+  color: #fff;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.level-details h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+  color: #f4f5ff;
+}
+
+.level-details p {
+  margin: 0;
+  color: #8c93b3;
+  font-size: 11px;
+}
+
+.level-progress-wrap {
+  flex: 1;
+  min-width: 260px;
+  max-width: 440px;
+}
+
+.level-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #a4accd;
+  margin-bottom: 6px;
+}
+
+.level-progress-labels strong {
+  color: #dcd8ff;
+}
+
+.level-bar {
+  height: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.level-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7150e2, #53d0dd);
+  transition: width 0.3s ease;
+}
+
+/* Achievement Gallery */
+.achievement-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.achievement-card {
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(156, 164, 207, 0.12);
+  background: linear-gradient(145deg, rgba(25, 29, 53, 0.86), rgba(14, 18, 34, 0.8));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.achievement-card.unlocked {
+  border-color: rgba(142, 112, 248, 0.35);
+  box-shadow: 0 10px 25px rgba(118, 77, 230, 0.08);
+}
+
+.achievement-card.locked {
+  opacity: 0.72;
+}
+
+.achievement-card:hover {
+  transform: translateY(-2px);
+}
+
+.achievement-card-top {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+}
+
+.achievement-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.achievement-icon-gold {
+  background: rgba(245, 169, 58, 0.16);
+  color: #ffcb74;
+}
+
+.achievement-icon-silver {
+  background: rgba(137, 102, 255, 0.16);
+  color: #baa7ff;
+}
+
+.achievement-icon-bronze {
+  background: rgba(218, 93, 176, 0.16);
+  color: #ee9ed5;
+}
+
+.achievement-icon-locked {
+  background: rgba(156, 164, 207, 0.1);
+  color: #6a718e;
+}
+
+.achievement-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-copy h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #f0f1ff;
+  letter-spacing: -0.02em;
+}
+
+.achievement-copy p {
+  margin: 0;
+  color: #7e85a4;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.achievement-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #727a98;
+}
+
+.xp-reward-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(137, 102, 255, 0.14);
+  color: #bbaaff;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+}
+
+.unlock-date {
+  color: #70d6c5;
+}
+
+/* XP Policy drawer / explanation */
+.xp-policy-panel {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(156, 164, 207, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 24px;
+}
+
+.xp-policy-panel h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #e5e8f6;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.policy-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(156, 164, 207, 0.08);
+  font-size: 10px;
+}
+
+.policy-item strong {
+  display: block;
+  color: #dfe2f4;
+  margin-bottom: 3px;
+}
+
+.policy-item span {
+  color: #a996ff;
+  font-family: 'DM Mono', monospace;
+}
+
+/* Responsive adjustments */
+@media (max-width: 980px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .subject-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .achievement-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .policy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .subject-grid {
+    grid-template-columns: 1fr;
+  }
+  .achievement-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  .level-hero {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .level-progress-wrap {
+    max-width: 100%;
+  }
+}
