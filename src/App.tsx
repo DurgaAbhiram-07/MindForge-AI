@@ -314,9 +314,9 @@ function App() {
                       <svg className="progress-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
                         <defs>
                           <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#6366f1" />
-                            <stop offset="50%" stopColor="#06b6d4" />
-                            <stop offset="100%" stopColor="#10b981" />
+                            <stop offset="0%" stopColor="#fedab8" />
+                            <stop offset="50%" stopColor="#fca86c" />
+                            <stop offset="100%" stopColor="#203c3d" />
                           </linearGradient>
                         </defs>
                         <circle className="progress-ring-track" cx="50" cy="50" r="44" />
@@ -385,7 +385,7 @@ function App() {
                 <span>{totalXp} Total XP</span>
               </div>
               <div className="level-bar" style={{ height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.08)' }}>
-                <span style={{ display: 'block', height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #6366f1, #06b6d4)', width: `${levelInfo.levelProgressPercent}%` }} />
+                <span style={{ display: 'block', height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #fedab8, #fca86c)', width: `${levelInfo.levelProgressPercent}%` }} />
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: '#94a3b8' }}>
                 <span>Next Rank: Level {Math.min(10, levelInfo.level + 1)}</span>
@@ -587,8 +587,8 @@ function App() {
               </button>
             </div>
 
-            <div style={{ padding: 18, borderRadius: 12, background: 'linear-gradient(145deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1))', border: '1px solid rgba(99, 102, 241, 0.3)', marginBottom: 20 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#c4b5fd', fontWeight: 700, fontSize: 14 }}>
+            <div style={{ padding: 18, borderRadius: 12, background: 'linear-gradient(145deg, rgba(254, 218, 184, 0.15), rgba(32, 60, 61, 0.4))', border: '1px solid rgba(254, 218, 184, 0.3)', marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#fedab8', fontWeight: 700, fontSize: 14 }}>
                 <Sparkles size={18} /> Everything You Need for True Cognitive Mastery
               </div>
               <p style={{ margin: '8px 0 0', fontSize: 12, color: '#cbd5e1', lineHeight: 1.6 }}>

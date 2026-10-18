@@ -21,7 +21,7 @@
   padding: 28px;
   border: 1px solid var(--border-medium);
   border-radius: 16px;
-  background: #0f172a;
+  background: #142728;
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
 }
 
@@ -51,7 +51,7 @@
 .planner-editor input:focus,
 .planner-editor select:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.16);
+  box-shadow: 0 0 0 3px rgba(254, 218, 184, 0.16);
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -106,10 +106,16 @@
 }
 
 .week-day-active {
-  color: #ffffff !important;
+  color: #122425 !important;
   border-color: var(--primary) !important;
-  background: rgba(99, 102, 241, 0.18) !important;
-  box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+  background: #fedab8 !important;
+  box-shadow: 0 0 16px rgba(254, 218, 184, 0.35);
+}
+
+.week-day-active strong,
+.week-day-active small,
+.week-day-active span {
+  color: #122425 !important;
 }
 
 .week-day strong {
@@ -142,8 +148,8 @@
 
 .schedule-mode button:hover,
 .schedule-mode .planner-tab-active {
-  color: #ffffff;
-  background: rgba(99, 102, 241, 0.22);
+  color: #122425;
+  background: #fedab8;
 }
 
 .week-list {
@@ -175,10 +181,10 @@
   align-items: center;
   gap: 5px;
   padding: 5px 8px;
-  color: var(--primary-light);
-  border: 1px solid rgba(99, 102, 241, 0.24);
+  color: #fedab8;
+  border: 1px solid rgba(254, 218, 184, 0.24);
   border-radius: 6px;
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(254, 218, 184, 0.1);
   font-size: 11px;
   font-weight: 600;
   text-align: left;
@@ -186,9 +192,9 @@
 }
 
 .resource-button:hover {
-  color: #ffffff;
-  background: rgba(99, 102, 241, 0.24);
-  border-color: rgba(99, 102, 241, 0.4);
+  color: #122425;
+  background: #fedab8;
+  border-color: #fedab8;
 }
 
 @media (max-width: 900px) {
