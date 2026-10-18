@@ -1,0 +1,18 @@
+{
+  "name": "mindforge-ai-product-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts MindForgeDemo out/mindforge-ai-demo.mp4",
+    "still": "remotion still src/index.ts MindForgeDemo out/preview.png"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.238",
+    "@remotion/media-utils": "^4.0.238",
+    "remotion": "^4.0.238",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "lucide-react": "^0.468.0"
+  }
+}
