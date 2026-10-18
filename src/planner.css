@@ -1,8 +1,236 @@
-.planner-page { max-width: 1120px; margin: 0 auto; }.planner-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }.planner-editor { width: min(720px, 100%); max-height: calc(100vh - 36px); overflow: auto; padding: 22px; border: 1px solid rgba(156,164,207,.18); border-radius: 14px; background: #12172a; box-shadow: 0 24px 70px rgba(0,0,0,.42); }
-.planner-editor label { display: grid; gap: 7px; margin-bottom: 13px; color: #9da4c0; font-size: 10px; font-weight: 700; }
-.planner-editor input, .planner-editor select { width: 100%; padding: 10px 11px; color: #edf0ff; outline: 0; border: 1px solid rgba(156,164,207,.16); border-radius: 7px; background: rgba(255,255,255,.045); font: inherit; font-size: 11px; }
-.planner-editor input:focus, .planner-editor select:focus { border-color: #9276f5; box-shadow: 0 0 0 3px rgba(146,118,245,.12); }
-.week-heading { display: flex; align-items: center; gap: 12px; }.week-heading > div { flex: 1; }.week-heading h2 { margin: 5px 0 0; font-size: 16px; }.week-today { white-space: nowrap; }
-.planner-week { margin-bottom: 14px; }.week-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; margin-top: 18px; }.week-day { display: grid; gap: 4px; padding: 10px 5px; color: #858ca8; border: 1px solid rgba(156,164,207,.1); border-radius: 8px; background: rgba(255,255,255,.025); text-align: center; }.week-day:hover, .week-day-active { color: #f0efff; border-color: rgba(155,126,255,.45); background: rgba(137,102,255,.18); }.week-day strong { font-size: 17px; }.week-day small { color: #737b98; font-size: 9px; }.schedule-mode { display: flex; gap: 5px; margin-top: 12px; }.schedule-mode button { padding: 6px 9px; color: #858ca8; border-radius: 6px; background: transparent; font-size: 10px; }.schedule-mode button:hover, .schedule-mode .planner-tab-active { color: #f0efff; background: rgba(137,102,255,.2); }.week-list { gap: 16px; }.week-list-day { display: grid; gap: 8px; }.week-list-day h3 { margin: 0; color: #afb5cf; font-size: 11px; }.task-resource-links { display: flex; flex-wrap: wrap; gap: 5px; }.resource-button { display: inline-flex; align-items: center; gap: 4px; padding: 4px 6px; color: #a997ff; border: 1px solid rgba(155,126,255,.22); border-radius: 5px; background: rgba(137,102,255,.08); font-size: 9px; text-align: left; }.resource-button:hover { color: #fff; background: rgba(137,102,255,.22); }
-@media (max-width: 900px) { .planner-summary { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .week-days { gap: 3px; }.week-day { padding-inline: 2px; }.week-day span { font-size: 9px; }.week-day strong { font-size: 14px; }.week-day small { font-size: 8px; }.week-heading { flex-wrap: wrap; }.week-today { margin-left: auto; }.planner-editor { padding: 17px; }.planner-summary { grid-template-columns: 1fr; } }
+/* ==========================================================================
+   MINDFORGE AI — STUDY PLANNER MODERN STYLES
+   ========================================================================== */
+
+.planner-page {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.planner-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.planner-editor {
+  width: min(720px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 28px;
+  border: 1px solid var(--border-medium);
+  border-radius: 16px;
+  background: #0f172a;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+.planner-editor label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 15px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.planner-editor input,
+.planner-editor select {
+  width: 100%;
+  padding: 11px 14px;
+  color: var(--text-main);
+  outline: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  font: inherit;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.planner-editor input:focus,
+.planner-editor select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.week-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.week-heading > div {
+  flex: 1;
+}
+
+.week-heading h2 {
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.week-today {
+  white-space: nowrap;
+}
+
+.planner-week {
+  margin-bottom: 20px;
+}
+
+.week-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.week-day {
+  display: grid;
+  gap: 6px;
+  padding: 12px 8px;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.week-day:hover {
+  color: #ffffff;
+  border-color: var(--border-medium);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.week-day-active {
+  color: #ffffff !important;
+  border-color: var(--primary) !important;
+  background: rgba(99, 102, 241, 0.18) !important;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+}
+
+.week-day strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.week-day small {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.schedule-mode {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.schedule-mode button {
+  padding: 7px 12px;
+  color: var(--text-muted);
+  border-radius: 7px;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.schedule-mode button:hover,
+.schedule-mode .planner-tab-active {
+  color: #ffffff;
+  background: rgba(99, 102, 241, 0.22);
+}
+
+.week-list {
+  display: grid;
+  gap: 18px;
+}
+
+.week-list-day {
+  display: grid;
+  gap: 10px;
+}
+
+.week-list-day h3 {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.task-resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.resource-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  color: var(--primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.24);
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.1);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.resource-button:hover {
+  color: #ffffff;
+  background: rgba(99, 102, 241, 0.24);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+@media (max-width: 900px) {
+  .planner-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .week-days {
+    gap: 4px;
+  }
+
+  .week-day {
+    padding-inline: 4px;
+  }
+
+  .week-day span {
+    font-size: 10px;
+  }
+
+  .week-day strong {
+    font-size: 15px;
+  }
+
+  .week-day small {
+    font-size: 9px;
+  }
+
+  .week-heading {
+    flex-wrap: wrap;
+  }
+
+  .week-today {
+    margin-left: auto;
+  }
+
+  .planner-editor {
+    padding: 20px;
+  }
+
+  .planner-summary {
+    grid-template-columns: 1fr;
+  }
+}

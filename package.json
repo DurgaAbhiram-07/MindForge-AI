@@ -2,6 +2,7 @@
   "name": "mindforge-ai",
   "private": true,
   "version": "0.1.0",
+  "homepage": "https://mind-forge-ai-umber.vercel.app/",
   "type": "module",
   "scripts": {
     "dev": "vite",

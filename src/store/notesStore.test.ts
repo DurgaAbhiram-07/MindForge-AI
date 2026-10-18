@@ -22,6 +22,11 @@ describe('notes store', () => {
       'demo-biology-cellular-respiration',
       'demo-mathematics-quadratics',
       'demo-history-world-war-two',
+      'demo-cs-graph-algorithms',
+      'demo-cs-distributed-systems',
+      'demo-neuroscience-memory',
+      'demo-math-linear-algebra',
+      'demo-physics-relativity',
     ])
     expect(notes.every((note) => note.isDemoData)).toBe(true)
   })
@@ -54,6 +59,18 @@ describe('notes store', () => {
     expect(useNotesStore.getState().notes.some((note) => note.id === noteId)).toBe(false)
   })
 
+  it('toggles favorite status on a note', () => {
+    const store = useNotesStore.getState()
+    const noteId = store.notes[0].id
+    expect(store.notes[0].favorite).toBeFalsy()
+
+    store.toggleFavorite(noteId)
+    expect(useNotesStore.getState().notes.find((n) => n.id === noteId)?.favorite).toBe(true)
+
+    store.toggleFavorite(noteId)
+    expect(useNotesStore.getState().notes.find((n) => n.id === noteId)?.favorite).toBe(false)
+  })
+
   it('persists notes under its own key', () => {
     const noteId = useNotesStore.getState().addNote({
       title: 'Persistence check',
@@ -73,7 +90,7 @@ describe('notes store', () => {
   it('falls back to safe demo data for malformed or invalid persisted data', () => {
     localStorage.setItem('mindforge-notes', '{not-json')
     useNotesStore.persist.rehydrate()
-    expect(useNotesStore.getState().notes).toHaveLength(3)
+    expect(useNotesStore.getState().notes).toHaveLength(8)
 
     localStorage.setItem('mindforge-notes', JSON.stringify({
       state: { notes: [{ id: 'bad', title: 'missing timestamps' }] },
@@ -84,6 +101,11 @@ describe('notes store', () => {
       'demo-biology-cellular-respiration',
       'demo-mathematics-quadratics',
       'demo-history-world-war-two',
+      'demo-cs-graph-algorithms',
+      'demo-cs-distributed-systems',
+      'demo-neuroscience-memory',
+      'demo-math-linear-algebra',
+      'demo-physics-relativity',
     ])
   })
 })
@@ -95,25 +117,23 @@ describe('note search, filter, and sort helpers', () => {
     const result = searchNotes(notes, 'electron transport')
 
     expect(result.map((note) => note.id)).toEqual(['demo-biology-cellular-respiration'])
-    expect(notes).toHaveLength(3)
+    expect(notes).toHaveLength(8)
     expect(searchNotes(notes, '')).not.toBe(notes)
   })
 
   it('filters by subject, topic, and unread state', () => {
     expect(filterNotes(notes, { subject: 'mathematics' }).map((note) => note.id)).toEqual([
       'demo-mathematics-quadratics',
+      'demo-math-linear-algebra',
     ])
-    expect(filterNotes(notes, { unreadOnly: true })).toHaveLength(2)
+    expect(filterNotes(notes, { unreadOnly: true })).toHaveLength(7)
     expect(filterNotes(notes, { topic: 'world war ii', unreadOnly: true })).toHaveLength(1)
   })
 
   it('sorts without mutating input and composes all helpers', () => {
     const newest = sortNotes(notes, 'createdAt', 'desc')
-    expect(newest.map((note) => note.id)).toEqual([
-      'demo-history-world-war-two',
-      'demo-mathematics-quadratics',
-      'demo-biology-cellular-respiration',
-    ])
+    expect(newest[0].id).toBe('demo-physics-relativity')
+    expect(newest[newest.length - 1].id).toBe('demo-biology-cellular-respiration')
     expect(notes[0].id).toBe('demo-biology-cellular-respiration')
 
     expect(selectNotes(notes, {

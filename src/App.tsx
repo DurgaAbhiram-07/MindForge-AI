@@ -8,12 +8,14 @@ import {
   CalendarDays,
   Check,
   ChevronRight,
+  Download,
   Flame,
   LayoutDashboard,
   Menu,
   MoreHorizontal,
   Plus,
   Search,
+  ShieldCheck,
   Sparkles,
   Target,
   Trophy,
@@ -67,6 +69,10 @@ function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [feedback, setFeedback] = useState('')
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [proModalOpen, setProModalOpen] = useState(false)
 
   const completedTasks = tasks.filter((task) => task.completed).length
   const completedMinutes = tasks.filter((task) => task.completed).reduce((total, task) => total + task.durationMinutes, 0)
@@ -104,6 +110,46 @@ function App() {
     const timeout = window.setTimeout(() => setFeedback(''), 3200)
     return () => window.clearTimeout(timeout)
   }, [feedback])
+
+  // Global Keyboard Shortcuts (Cmd+K / Ctrl+K and ESC)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setSearchOpen((prev) => !prev)
+      } else if (e.key === 'Escape') {
+        setSearchOpen(false)
+        setProfileOpen(false)
+        setProModalOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  const handleExportData = () => {
+    const backup = {
+      exportedAt: new Date().toISOString(),
+      user: { name: 'Durga Abhiram', workspace: "Durga's workspace" },
+      stats: { totalXp, level: levelInfo.level, streak: currentStreak, accuracy: displayedAccuracy, studyHours },
+      dashboard: useDashboardStore.getState(),
+      notes: useNotesStore.getState().notes,
+      quizzes: useQuizStore.getState().quizzes,
+      attempts: useQuizStore.getState().attempts,
+      plannerTasks: usePlannerStore.getState().tasks,
+      transactions: useGamificationStore.getState().transactions,
+    }
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `mindforge-backup-${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+    setFeedback('Workspace backup exported successfully.')
+  }
 
   const handleTaskToggle = (task: DashboardTask) => {
     toggleTask(task.id)
@@ -144,11 +190,16 @@ function App() {
           </button>
         </div>
 
-        <div className="workspace-switcher">
+        <button
+          className="workspace-switcher"
+          onClick={() => setProfileOpen(true)}
+          style={{ width: '100%', textAlign: 'left', cursor: 'pointer' }}
+          aria-label="Manage Durga's workspace"
+        >
           <div className="avatar avatar-purple">DA</div>
           <div className="workspace-copy"><span>Durga's workspace</span><small>Personal learning</small></div>
           <ChevronRight size={16} className="muted-icon" />
-        </div>
+        </button>
 
         <nav className="nav-list">
           <p className="nav-label">Workspace</p>
@@ -170,9 +221,11 @@ function App() {
             <div className="upgrade-icon"><Sparkles size={16} /></div>
             <p>Unlock your full potential</p>
             <span>Get deeper insights with MindForge Pro.</span>
-            <button className="upgrade-button">Explore Pro <ArrowUpRight size={14} /></button>
+            <button className="upgrade-button" onClick={() => setProModalOpen(true)}>
+              Explore Pro <ArrowUpRight size={14} />
+            </button>
           </div>
-          <button className="profile-row">
+          <button className="profile-row" onClick={() => setProfileOpen(true)} aria-label="Open Durga's profile">
             <div className="avatar avatar-cyan">DA</div>
             <span className="profile-name">Durga Abhiram</span>
             <MoreHorizontal size={18} className="muted-icon" />
@@ -187,14 +240,14 @@ function App() {
           <button className="icon-button menu-button" onClick={() => setSidebarOpen(true)} aria-label="Open navigation"><Menu size={21} /></button>
           <div className="breadcrumbs"><span>Workspace</span><ChevronRight size={15} /><strong>{activePage}</strong></div>
           <div className="topbar-actions">
-            <button className="search-button" aria-label="Search"><Search size={17} /><span>Search anything</span><kbd>⌘ K</kbd></button>
-            <div className="topbar-avatar avatar avatar-cyan">DA</div>
+            <button className="search-button" onClick={() => setSearchOpen(true)} aria-label="Search"><Search size={17} /><span>Search anything</span><kbd>⌘ K</kbd></button>
+            <button className="topbar-avatar avatar avatar-cyan" onClick={() => setProfileOpen(true)} aria-label="Open Durga's profile">DA</button>
           </div>
         </header>
 
         <div className="page-content">
           {activePage === 'Study materials' ? (
-            <StudyMaterialsPage onFeedback={setFeedback} />
+            <StudyMaterialsPage onFeedback={setFeedback} onNavigate={setActivePage} />
           ) : activePage === 'Quizzes' ? (
             <QuizzesPage onFeedback={setFeedback} />
           ) : activePage === 'Study planner' ? (
@@ -232,7 +285,55 @@ function App() {
               <div className="dashboard-grid">
                 <section className="panel focus-panel">
                   <div className="panel-heading"><div><p className="section-kicker">Today’s focus</p><h2>Make progress, one session at a time.</h2></div><button className="icon-button"><MoreHorizontal size={19} /></button></div>
-                  <div className="focus-progress-row"><div><span className="focus-number">{dailyProgress}</span><span className="focus-unit">%</span><p>of your daily goal complete</p></div><div className="progress-ring" aria-label={`${dailyProgress} percent of daily goal complete`}><span>{dailyProgress}%</span></div></div>
+                  <div className="focus-progress-row">
+                    <div>
+                      <span className="focus-number">{dailyProgress}</span>
+                      <span className="focus-unit">%</span>
+                      <p>of your daily goal complete</p>
+                    </div>
+                    <div
+                      className={`progress-ring ${dailyProgress === 100 ? 'progress-ring-complete' : ''}`}
+                      aria-label={`${dailyProgress} percent of daily goal complete`}
+                    >
+                      <div className="water-container">
+                        <div
+                          className={`water-fill ${dailyProgress === 0 ? 'water-fill-empty' : ''}`}
+                          style={{ height: `${dailyProgress}%` }}
+                        >
+                          <div className="water-wave wave-back" />
+                          <div className="water-wave wave-front" />
+                          {dailyProgress > 0 && (
+                            <>
+                              <div className="water-bubble b1" />
+                              <div className="water-bubble b2" />
+                              <div className="water-bubble b3" />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <svg className="progress-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
+                        <defs>
+                          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#6366f1" />
+                            <stop offset="50%" stopColor="#06b6d4" />
+                            <stop offset="100%" stopColor="#10b981" />
+                          </linearGradient>
+                        </defs>
+                        <circle className="progress-ring-track" cx="50" cy="50" r="44" />
+                        <circle
+                          className="progress-ring-fill"
+                          cx="50"
+                          cy="50"
+                          r="44"
+                          style={{
+                            strokeDasharray: 276.46,
+                            strokeDashoffset: 276.46 - (276.46 * Math.min(100, Math.max(0, dailyProgress))) / 100,
+                          }}
+                        />
+                      </svg>
+                      <span className="progress-ring-text">{dailyProgress}%</span>
+                    </div>
+                  </div>
                   <div className="goal-bar"><span style={{ width: `${dailyProgress}%` }} /></div>
                   <div className="focus-footer"><span><span className="status-dot" /> {Math.max(0, dailyGoalMinutes - completedMinutes)} min remaining</span><span className="focus-count">{completedTasks}/{tasks.length} tasks</span></div>
                   <div className="task-list" aria-label="Today's study tasks">{tasks.map((task) => <TaskRow key={task.id} task={task} onToggle={() => handleTaskToggle(task)} />)}</div>
@@ -255,6 +356,280 @@ function App() {
           )}
         </div>
       </main>
+
+      {/* Profile Modal */}
+      {profileOpen && (
+        <div className="modal-backdrop" onClick={() => setProfileOpen(false)}>
+          <div className="profile-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Student Profile and Preferences">
+            <div className="modal-heading">
+              <div>
+                <p className="eyebrow">User Profile &amp; Settings</p>
+                <h2>Durga Abhiram</h2>
+              </div>
+              <button className="icon-button" onClick={() => setProfileOpen(false)} aria-label="Close profile">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="profile-user-hero">
+              <div className="profile-user-avatar">DA</div>
+              <div className="profile-user-info">
+                <h3>Durga Abhiram</h3>
+                <p>Personal Workspace &bull; <span style={{ color: '#34d399', fontWeight: 600 }}>100% Offline-First</span></p>
+              </div>
+            </div>
+
+            <div className="profile-level-card">
+              <div className="profile-level-header">
+                <h4>Level {levelInfo.level} &mdash; {levelInfo.title}</h4>
+                <span>{totalXp} Total XP</span>
+              </div>
+              <div className="level-bar" style={{ height: 8, borderRadius: 4, background: 'rgba(255,255,255,0.08)' }}>
+                <span style={{ display: 'block', height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #6366f1, #06b6d4)', width: `${levelInfo.levelProgressPercent}%` }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: '#94a3b8' }}>
+                <span>Next Rank: Level {Math.min(10, levelInfo.level + 1)}</span>
+                <span>{levelInfo.levelProgressPercent}% to Level Up</span>
+              </div>
+            </div>
+
+            <div className="profile-stats-grid">
+              <div className="profile-stat-box">
+                <span>Active Streak</span>
+                <strong>{currentStreak} Days 🔥</strong>
+              </div>
+              <div className="profile-stat-box">
+                <span>Quiz Accuracy</span>
+                <strong>{displayedAccuracy}%</strong>
+              </div>
+              <div className="profile-stat-box">
+                <span>Study Time</span>
+                <strong>{studyHours} hrs</strong>
+              </div>
+              <div className="profile-stat-box">
+                <span>Saved Notes</span>
+                <strong>{notes.length}</strong>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gap: 14, margin: '20px 0', borderTop: '1px solid rgba(148,163,207,0.12)', paddingTop: 18 }}>
+              <label style={{ display: 'grid', gap: 6, fontSize: 12, fontWeight: 700, color: '#94a3b8' }}>
+                Daily Study Goal (Minutes)
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {[30, 45, 60, 90, 120].map((mins) => (
+                    <button
+                      key={mins}
+                      className={`date-filter-button ${dailyGoalMinutes === mins ? 'active' : ''}`}
+                      onClick={() => {
+                        useDashboardStore.setState({ dailyGoalMinutes: mins })
+                        setFeedback(`Daily goal updated to ${mins} minutes.`)
+                      }}
+                      style={{ flex: 1, padding: '7px 0', fontSize: 12 }}
+                    >
+                      {mins}m
+                    </button>
+                  ))}
+                </div>
+              </label>
+            </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '18px 0', borderTop: '1px solid rgba(148,163,207,0.12)', paddingTop: 18 }}>
+              <button
+                className="secondary-button"
+                onClick={handleExportData}
+                style={{ flex: 1, minWidth: 160 }}
+              >
+                <Download size={14} /> Export Backup (JSON)
+              </button>
+              <button
+                className="secondary-button"
+                onClick={() => {
+                  restoreDemoActivity()
+                  setFeedback('Demo activity restored.')
+                }}
+                style={{ flex: 1, minWidth: 160 }}
+              >
+                <Sparkles size={14} /> Restore Demo Data
+              </button>
+            </div>
+
+            <div className="modal-actions" style={{ marginTop: 24 }}>
+              <button
+                className="secondary-button"
+                onClick={() => {
+                  setActivePage('Analytics')
+                  setProfileOpen(false)
+                }}
+              >
+                <BarChart3 size={14} /> Analytics
+              </button>
+              <button
+                className="secondary-button"
+                onClick={() => {
+                  setActivePage('Achievements')
+                  setProfileOpen(false)
+                }}
+              >
+                <Award size={14} /> Badges
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => setProfileOpen(false)}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Command Palette / Search Modal */}
+      {searchOpen && (
+        <div className="modal-backdrop" onClick={() => setSearchOpen(false)}>
+          <div className="command-palette-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Command search palette">
+            <div className="command-search-header">
+              <Search size={18} style={{ color: '#818cf8', flexShrink: 0 }} />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search workspaces, notes, quizzes, or tasks..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button className="icon-button" onClick={() => setSearchOpen(false)} aria-label="Close search">
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="command-search-results">
+              <div className="command-group-title">Workspaces</div>
+              {navItems
+                .filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
+                .map((item) => (
+                  <button
+                    key={item.label}
+                    className="command-item"
+                    onClick={() => {
+                      setActivePage(item.label)
+                      setSearchOpen(false)
+                    }}
+                  >
+                    <item.icon size={16} />
+                    <span>{item.label}</span>
+                    <kbd>Go &rarr;</kbd>
+                  </button>
+                ))}
+
+              {notes.length > 0 && (
+                <>
+                  <div className="command-group-title">Study Notes</div>
+                  {notes
+                    .filter((n) => n.title.toLowerCase().includes(searchQuery.toLowerCase()) || n.subject.toLowerCase().includes(searchQuery.toLowerCase()))
+                    .slice(0, 4)
+                    .map((n) => (
+                      <button
+                        key={n.id}
+                        className="command-item"
+                        onClick={() => {
+                          setActivePage('Study materials')
+                          setSearchOpen(false)
+                        }}
+                      >
+                        <BookOpen size={16} />
+                        <span>{n.title} <small style={{ color: '#64748b' }}>({n.subject})</small></span>
+                      </button>
+                    ))}
+                </>
+              )}
+
+              {quizzes.length > 0 && (
+                <>
+                  <div className="command-group-title">Quizzes</div>
+                  {quizzes
+                    .filter((q) => q.title.toLowerCase().includes(searchQuery.toLowerCase()) || q.topic.toLowerCase().includes(searchQuery.toLowerCase()))
+                    .slice(0, 4)
+                    .map((q) => (
+                      <button
+                        key={q.id}
+                        className="command-item"
+                        onClick={() => {
+                          setActivePage('Quizzes')
+                          setSearchOpen(false)
+                        }}
+                      >
+                        <BrainCircuit size={16} />
+                        <span>{q.title} <small style={{ color: '#64748b' }}>({q.topic})</small></span>
+                      </button>
+                    ))}
+                </>
+              )}
+            </div>
+
+            <div className="command-footer">
+              <span>Navigate with mouse or Tab</span>
+              <span>ESC to dismiss</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MindForge Pro Modal */}
+      {proModalOpen && (
+        <div className="modal-backdrop" onClick={() => setProModalOpen(false)}>
+          <div className="pro-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="MindForge Pro Features">
+            <div className="modal-heading">
+              <div>
+                <p className="eyebrow">Enterprise &amp; Deep Learning</p>
+                <h2>MindForge Pro</h2>
+              </div>
+              <button className="icon-button" onClick={() => setProModalOpen(false)} aria-label="Close pro dialog">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ padding: 18, borderRadius: 12, background: 'linear-gradient(145deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1))', border: '1px solid rgba(99, 102, 241, 0.3)', marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: '#c4b5fd', fontWeight: 700, fontSize: 14 }}>
+                <Sparkles size={18} /> Everything You Need for True Cognitive Mastery
+              </div>
+              <p style={{ margin: '8px 0 0', fontSize: 12, color: '#cbd5e1', lineHeight: 1.6 }}>
+                MindForge Pro remains 100% privacy-first. When you bring your own API key or run local models, features unlock without sending personal notes to remote cloud trackers.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gap: 12, marginBottom: 24 }}>
+              {[
+                { title: 'Local AI Provider Bridge', desc: 'Plug into Ollama, LM Studio, or private OpenAI-compatible endpoints with custom system prompts.' },
+                { title: 'Spaced Repetition Algorithm', desc: 'Deterministic SM-2 interval scheduling tailored to your weak topic accuracy ratings.' },
+                { title: 'Unlimited PDF & Markdown Export', desc: 'Compile complete study guides and diagnostic mastery audit reports in one click.' },
+                { title: 'Multi-device Encrypted Sync', desc: 'End-to-end encrypted backup sync across desktop and mobile devices.' },
+              ].map((perk, i) => (
+                <div key={i} style={{ display: 'flex', gap: 12, padding: 12, borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(148,163,207,0.1)' }}>
+                  <ShieldCheck size={18} style={{ color: '#34d399', flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <strong style={{ display: 'block', fontSize: 13, color: '#f8fafc' }}>{perk.title}</strong>
+                    <span style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.5 }}>{perk.desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="modal-actions">
+              <button className="secondary-button" onClick={() => setProModalOpen(false)}>
+                Maybe Later
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => {
+                  setProModalOpen(false)
+                  setFeedback('Pro waitlist confirmed. Thank you!')
+                }}
+              >
+                Join Pro Early Access
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
